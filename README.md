@@ -50,8 +50,8 @@
 ![Component Hierarchy](./images/Component%20.jpeg)
 #### Wireframe
 ![Wireframe](./images/Wireframe1.jpeg)
-![Wireframe](./images/Wireframe2.jpeg)
-![Wireframe](./images/Wireframe3.jpeg)
+![Wireframe](./images/Wireframe%202.jpeg)
+![Wireframe](./images/Wireframe%203.jpeg)
 
 ***
 
