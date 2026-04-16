@@ -18,7 +18,7 @@
 
 ## ***Description***
 
-#### The Airport Management System is a full-stack application designed to streamline airport operations. The platform provides a dual-interface experience: an Admin Dashboard for managing personnel, flights, and task assignments, and a Staff Portal for employees to track their assigned flights and duties in real-time.
+#### The AeroMgt is a full-stack application designed to streamline airport operations. The platform provides a dual-interface experience: an Admin Dashboard for managing personnel, flights, and task assignments, and a Staff Portal for employees to track their assigned flights and duties in real-time.
 
 #### By centralizing flight schedules and task management, the system ensures efficient communication between airport administration and ground staff, improving overall operational workflow.
 
