@@ -1,41 +1,41 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import authService from '../auth/authService'
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import { BASE_URL } from "../global"
 
-function Login() {
-  const [formData, setFormData] = useState({ email: '', password: '' })
+const Login = () => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      const user = await authService.login(formData)
+      const response = await axios.post(`${BASE_URL}auth/login`, {
+        email,
+        password
+      })
 
-      if (user.user.role === 'admin') {
-        navigate('/admin-dashboard')
-      } else {
-        navigate('/staff-dashboard')
-      }
+      localStorage.setItem("userToken", response.data.token)
+      localStorage.setItem("userRole", response.data.user.role)
+      localStorage.setItem("userName", response.data.user.name)
 
+      navigate("/")
     } catch (error) {
-      alert("Login failed: " + error.response.data.error)
+      console.error("Login Error:", error)
+      alert("Error logging")
     }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        placeholder="Email"
-        onChange={(e) => setFormData({...formData, email: e.target.value})}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setFormData({...formData, password: e.target.value})}
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="loginPage">
+      <h1>Aero Login</h1>
+      <form onSubmit={handleLogin}>
+        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
   )
 }
 
