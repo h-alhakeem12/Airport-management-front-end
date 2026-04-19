@@ -11,12 +11,15 @@ const StaffSidebar = () => {
   return (
     <div>
       <h3>Staff Panel</h3>
-      <nav>
-        <Link to="/StaffDashboard">Dashboard</Link>
-        <Link to="/MyTasks">My Tasks</Link>
-        <Link to="/MyFlights">My Flights</Link>
-      </nav>
-      <button onClick={handleLogout} className="signOutBtn">Sign Out</button>
+
+      <Link to="/StaffDashboard">Dashboard</Link>
+      <br />
+      <Link to="/MyTasks">My Tasks</Link>
+      <br />
+      <Link to="/MyFlights">My Flights</Link>
+      <br /><br />
+
+      <button onClick={handleLogout}>Sign Out</button>
     </div>
   )
 }

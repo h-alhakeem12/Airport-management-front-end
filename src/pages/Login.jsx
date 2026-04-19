@@ -20,16 +20,21 @@ const Login = () => {
       localStorage.setItem("userRole", response.data.user.role)
       localStorage.setItem("userName", response.data.user.name)
 
-      navigate("/")
+      if (response.data.user.role === "admin") {
+        navigate("/AdminDashboard")
+      } else {
+        navigate("/StaffDashboard")
+      }
+
     } catch (error) {
-      console.error("Login Error:", error)
-      alert("Error logging")
+      console.error(error)
+      alert("Invalid email or password")
     }
   }
 
   return (
-    <div className="loginPage">
-      <h1>Aero Login</h1>
+    <div>
+      <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
         <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />

@@ -11,13 +11,17 @@ const AdminSidebar = () => {
   return (
     <div>
       <h3>Admin Panel</h3>
-      <nav>
-        <Link to="/AdminDashboard">Dashboard</Link>
-        <Link to="/StaffManager">Staff Manager</Link>
-        <Link to="/TaskManager">Task Manager</Link>
-        <Link to="/FlightManager">Flight Manager</Link>
-      </nav>
-      <button onClick={handleLogout} className="signOutBtn">Sign Out</button>
+
+      <Link to="/AdminDashboard">Dashboard</Link>
+      <br />
+      <Link to="/StaffManager">Staff Manager</Link>
+      <br />
+      <Link to="/TaskManager">Task Manager</Link>
+      <br />
+      <Link to="/FlightManager">Flight Manager</Link>
+      <br /><br />
+
+      <button onClick={handleLogout}>Sign Out</button>
     </div>
   )
 }
