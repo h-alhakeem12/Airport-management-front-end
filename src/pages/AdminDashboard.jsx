@@ -2,20 +2,24 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { BASE_URL } from "../global"
 import AdminSidebar from "../components/AdminSidebar"
-import { useNavigate, Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const AdminDashboard = () => {
-  const [staffCount, setStaffCount] = useState(0)
-  const [flightsCount, setFlightsCount] = useState(0)
-  const [tasksCount, setTasksCount] = useState(0)
-  const [terminalsCount, setTerminalsCount] = useState(0)
+  const [counts, setCounts] = useState({
+    staff: 0,
+    flights: 0,
+    tasks: 0,
+    terminals: 0,
+  })
 
   const navigate = useNavigate()
 
   useEffect(() => {
     const role = localStorage.getItem("userRole")
+
     if (role !== "admin") {
       navigate("/login")
+      return
     }
 
     fetchData()
@@ -23,51 +27,47 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const staff = await axios.get(`${BASE_URL}staff`)
-      const flights = await axios.get(`${BASE_URL}flights`)
-      const tasks = await axios.get(`${BASE_URL}tasks`)
-      const terminals = await axios.get(`${BASE_URL}terminal`)
+      const [s, f, t, term] = await Promise.all([
+        axios.get(`${BASE_URL}staff`),
+        axios.get(`${BASE_URL}flights`),
+        axios.get(`${BASE_URL}tasks`),
+        axios.get(`${BASE_URL}terminal`),
+      ])
 
-      setStaffCount(staff.data.length)
-      setFlightsCount(flights.data.length)
-      setTasksCount(tasks.data.length)
-      setTerminalsCount(terminals.data.length)
-    } catch (error) {
-      console.error(error)
+      setCounts({
+        staff: s.data.length,
+        flights: f.data.length,
+        tasks: t.data.length,
+        terminals: term.data.length,
+      })
+    } catch (e) {
+      console.error(e)
     }
   }
 
   return (
-    <div className="dashboard-container">
-      <AdminSidebar />
+    <div>
       <h1>Admin Dashboard</h1>
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <h3>Total Staff: {staffCount}</h3>
-          <Link to="/StaffManager">
-            <button>Manage Staff</button>
+      <div>
+        <div>
+          <h3>Total Staff: {counts.staff}</h3>
+          <Link to="/admin/staff">
+            <button>Manage</button>
           </Link>
         </div>
 
-        <div className="stat-card">
-          <h3>Total Flights: {flightsCount}</h3>
-          <Link to="/flights">
-            <button>Manage Flights</button>
+        <div>
+          <h3>Total Flights: {counts.flights}</h3>
+          <Link to="/admin/flights">
+            <button>Manage</button>
           </Link>
         </div>
 
-        <div className="stat-card">
-          <h3>Total Tasks: {tasksCount}</h3>
-          <Link to="/TaskManager">
-            <button>Manage Tasks</button>
-          </Link>
-        </div>
-
-        <div className="stat-card">
-          <h3>Active Terminals: {terminalsCount}</h3>
-          <Link to="/TerminalManager">
-            <button>Manage Terminals</button>
+        <div>
+          <h3>Total Tasks: {counts.tasks}</h3>
+          <Link to="/admin/tasks">
+            <button>Manage</button>
           </Link>
         </div>
       </div>
