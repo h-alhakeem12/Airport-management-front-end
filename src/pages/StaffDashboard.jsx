@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { BASE_URL } from "../global"
-import StaffSidebar from "../components/StaffSidebar"
 
 const StaffDashboard = () => {
   const navigate = useNavigate()
@@ -14,27 +13,27 @@ const StaffDashboard = () => {
 
   useEffect(() => {
     const role = localStorage.getItem("userRole")
-    const userName = localStorage.getItem("userName")
+    const userId = localStorage.getItem("userId")
 
     if (role !== "staff") {
       navigate("/login")
+      return
     }
 
-    fetchData(userName)
-  }, [])
+    fetchData(userId)
+  }, [navigate])
 
-  const fetchData = async (userName) => {
+  const fetchData = async (userId) => {
     try {
       const tasksRes = await axios.get(`${BASE_URL}tasks`)
       const flightsRes = await axios.get(`${BASE_URL}flights`)
 
-      const myTasks = tasksRes.data.filter(
-        (task) => task.assignedTo?.name === userName
-      )
-
-      const myFlights = flightsRes.data.filter(
-        (flight) => flight.pilot?.name === userName
-      )
+     const myTasks = tasksRes.data.filter(
+  (task) => task.assignedTo?._id === userId
+)
+     const myFlights = flightsRes.data.filter(
+  (flight) => flight.pilot?._id === userId
+)
 
       setTasks(myTasks)
       setFlights(myFlights)
@@ -43,7 +42,7 @@ const StaffDashboard = () => {
 
       const tasksToday = myTasks.filter(
         (task) =>
-          new Date(task.createdAt).toDateString() === today
+          new Date(task.createdAt || task.updatedAt).toDateString() === today
       )
 
       const flightsToday = myFlights.filter(
@@ -61,41 +60,36 @@ const StaffDashboard = () => {
 
   return (
     <div>
-      <StaffSidebar />
+      <h1>Staff Dashboard</h1>
+
       <div>
-        <h1>Staff Dashboard</h1>
-
-        <div>
-          <h3>My Tasks: {tasks.length}</h3>
-          <h3>My Flights: {flights.length}</h3>
-        </div>
-
-        <h2>Today's Tasks</h2>
-        {todayTasks.length === 0 ? (
-          <p>No tasks today</p>
-        ) : (
-          todayTasks.map((task) => (
-            <div key={task._id}>
-              <h4>{task.title}</h4>
-              <p>{task.status}</p>
-            </div>
-          ))
-        )}
-
-        <h2>Today's Flights</h2>
-        {todayFlights.length === 0 ? (
-          <p>No flights today</p>
-        ) : (
-          todayFlights.map((flight) => (
-            <div key={flight._id}>
-              <h4>{flight.flightNumber}</h4>
-              <p>{flight.destination}</p>
-              <p>{new Date(flight.departureTime).toLocaleString()}</p>
-            </div>
-          ))
-        )}
-
+        <h3>My Tasks: {tasks.length}</h3>
+        <h3>My Flights: {flights.length}</h3>
       </div>
+
+      <h2>Today's Tasks</h2>
+      {todayTasks.length === 0 ? (
+        <p>No tasks today</p>
+      ) : (
+        todayTasks.map((task) => (
+          <div key={task._id}>
+            <h4>{task.title}</h4>
+            <p>{task.status}</p>
+          </div>
+        ))
+      )}
+
+      <h2>Today's Flights</h2>
+      {todayFlights.length === 0 ? (
+        <p>No flights today</p>
+      ) : (
+        todayFlights.map((flight) => (
+          <div key={flight._id}>
+            <h4>{flight.flightNumber}</h4>
+            <p>{flight.destination}</p>
+          </div>
+        ))
+      )}
     </div>
   )
 }
