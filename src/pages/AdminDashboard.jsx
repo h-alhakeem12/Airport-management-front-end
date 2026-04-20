@@ -3,7 +3,6 @@ import axios from "axios"
 import { BASE_URL } from "../global"
 import AdminSidebar from "../components/AdminSidebar"
 import { useNavigate, Link } from "react-router-dom"
-import Flight from "./FlightManager"
 
 const AdminDashboard = () => {
   const [staffCount, setStaffCount] = useState(0)
@@ -39,37 +38,37 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div>
+    <div className="dashboard-container">
       <AdminSidebar />
-      <div>
-        <h1>Admin Dashboard</h1>
+      <h1>Admin Dashboard</h1>
 
-        <div>
-          <div>
-            <h3>Total Staff: {staffCount}</h3>
-            <Link to="/admin/staff">
-              <button>Manage Staff</button>
-            </Link>
-          </div>
+      <div className="stats-grid">
+        <div className="stat-card">
+          <h3>Total Staff: {staffCount}</h3>
+          <Link to="/StaffManager">
+            <button>Manage Staff</button>
+          </Link>
+        </div>
 
-          <div>
-            <h3>Total Flights: {flightsCount}</h3>
-            <Link to="flights">
-              <button>Manage Flights</button>
-            </Link>
-          </div>
-          <div>
-            <h3>Total Tasks: {tasksCount}</h3>
-            <Link to="/admin/tasks">
-              <button>Manage Tasks</button>
-            </Link>
-          </div>
-          <div>
-            <h3>Active Terminals: {terminalsCount}</h3>
-            <Link to="/admin/terminals">
-              <button>Manage Terminals</button>
-            </Link>
-          </div>
+        <div className="stat-card">
+          <h3>Total Flights: {flightsCount}</h3>
+          <Link to="/flights">
+            <button>Manage Flights</button>
+          </Link>
+        </div>
+
+        <div className="stat-card">
+          <h3>Total Tasks: {tasksCount}</h3>
+          <Link to="/TaskManager">
+            <button>Manage Tasks</button>
+          </Link>
+        </div>
+
+        <div className="stat-card">
+          <h3>Active Terminals: {terminalsCount}</h3>
+          <Link to="/TerminalManager">
+            <button>Manage Terminals</button>
+          </Link>
         </div>
       </div>
     </div>

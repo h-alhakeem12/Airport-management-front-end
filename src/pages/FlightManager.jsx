@@ -111,7 +111,7 @@ const Flight = () => {
         />
         <input
           name="departureTime"
-          placeholder="Departure Time"
+          placeholder="Departure Time "
           value={formData.departureTime}
           onChange={handleChange}
           required

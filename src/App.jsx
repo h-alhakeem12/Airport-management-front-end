@@ -1,6 +1,5 @@
 import "./App.css"
 import { Routes, Route } from "react-router-dom"
-import StaffManage from "./pages/StaffManage"
 
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
@@ -11,7 +10,7 @@ import AdminDashboard from "./pages/AdminDashboard"
 import StaffDashboard from "./pages/StaffDashboard"
 import MyTasks from "./pages/MyTasks"
 import Flight from "./pages/FlightManager"
-
+import StaffManager from "./pages/StaffManager"
 function App() {
   return (
     <div className="App">
@@ -22,7 +21,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
-          <Route path="/staff-manage" element={<StaffManage />} />
+          <Route path="/AdminDashboard" element={<AdminDashboard />} />
+          <Route path="/StaffDashboard" element={<StaffDashboard />} />
+          <Route path="/MyTasks" element={<MyTasks />} />
+          <Route path="/flights" element={<Flight />} />
+          <Route path="/StaffManager" element={<StaffManager />} />
         </Routes>
       </main>
 
