@@ -1,5 +1,6 @@
 import "./App.css"
 import { Routes, Route } from "react-router-dom"
+import StaffManage from "./pages/StaffManage"
 
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
@@ -21,10 +22,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
-          <Route path="/AdminDashboard" element={<AdminDashboard />} />
-          <Route path="/StaffDashboard" element={<StaffDashboard />} />
-          <Route path="/MyTasks" element={<MyTasks />} />
-          <Route path="/AdminDashboard/flights" element={<Flight />} />
+          <Route path="/staff-manage" element={<StaffManage />} />
         </Routes>
       </main>
 
