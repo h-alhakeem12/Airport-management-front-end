@@ -15,8 +15,8 @@ const MyTasks = () => {
 
       const res = await axios.get(`${BASE_URL}tasks`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       })
 
       setTasks(res.data)
