@@ -2,19 +2,22 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { BASE_URL } from "../global.js"
 
+const initialState = {
+  flightNumber: "",
+  destination: "",
+  departureTime: "",
+  status: "Scheduled",
+  pilot: "",
+  terminal: "",
+  createdBy: "",
+}
+
 const Flight = () => {
   const [flights, setFlights] = useState([])
   const [message, setMessage] = useState("")
 
-  const [formData, setFormData] = useState({
-    flightNumber: "",
-    destination: "",
-    departureTime: "",
-    status: "Scheduled",
-    pilot: "",
-    terminal: "",
-    createdBy: "",
-  })
+  const [formData, setFormData] = useState(initialState)
+  const [editingId, setEditingId] = useState(null)
 
   const getFlights = async () => {
     try {
@@ -32,21 +35,25 @@ const Flight = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
+  const handleEditInit = (flight) => {
+    setEditingId(flight._id)
+    setFormData({
+      flightNumber: flight.flightNumber,
+      destination: flight.destination,
+      departureTime: flight.departureTime,
+      status: flight.status,
+      pilot: flight.pilot,
+      terminal: flight.terminal,
+      createdBy: flight.createdBy,
+    })
+  }
 
-  const handleSubmit = async (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault()
     try {
       await axios.post(`${BASE_URL}flights`, formData)
       getFlights()
-      setFormData({
-        flightNumber: "",
-        destination: "",
-        departureTime: "",
-        status: "Scheduled",
-        pilot: "",
-        terminal: "",
-        createdBy: "",
-      })
+      setFormData(initialState)
       setMessage("Flight added successfully")
     } catch (error) {
       setMessage("Error adding flight")
@@ -63,31 +70,31 @@ const Flight = () => {
     }
   }
 
-  const handleUpdateAll = async (id) => {
+  const handleUpdate = async (id) => {
     try {
       await axios.put(`${BASE_URL}flights/${id}`, formData)
       setMessage("Flight updated completely!")
+      setEditingId(null)
+      setFormData(initialState)
       getFlights()
     } catch (error) {
       setMessage("Update failed. Check all fields.")
     }
   }
+  const cancelEdit = () => {
+    setEditingId(null)
+    setFormData(initialState)
+    setMessage("")
+  }
 
   return (
     <div className="flight-manager">
       <h2>Flight Management</h2>
+      <h3>{editingId ? "Update Flight Mode" : "Register New Flight"}</h3>
 
       {message && <p>{message}</p>}
 
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          maxWidth: "400px",
-        }}
-      >
+      <form onSubmit={editingId ? handleUpdate : handleCreate}>
         <input
           name="flightNumber"
           placeholder="Flight Number"
@@ -104,7 +111,7 @@ const Flight = () => {
         />
         <input
           name="departureTime"
-          placeholder="Departure Time (e.g. 10:00 AM)"
+          placeholder="Departure Time"
           value={formData.departureTime}
           onChange={handleChange}
           required
@@ -118,27 +125,36 @@ const Flight = () => {
 
         <input
           name="pilot"
-          placeholder="Pilot IF"
+          placeholder="Pilot ID"
           value={formData.pilot}
           onChange={handleChange}
           required
         />
         <input
           name="terminal"
-          placeholder="Terminal IF"
+          placeholder="Terminal ID"
           value={formData.terminal}
           onChange={handleChange}
           required
         />
         <input
           name="createdBy"
-          placeholder="Admin IF"
+          placeholder="Admin ID"
           value={formData.createdBy}
           onChange={handleChange}
           required
         />
 
-        <button type="submit">Create Flight</button>
+        {!editingId ? (
+          <button type="submit">Create Flight</button>
+        ) : (
+          <div>
+            <button type="submit">Confirm Update</button>
+            <button type="button" onClick={cancelEdit}>
+              Cancel Edit
+            </button>
+          </div>
+        )}
       </form>
 
       <hr />
@@ -148,16 +164,11 @@ const Flight = () => {
         {flights.map((flight) => (
           <div key={flight._id}>
             <p>
-              <strong>{flight.flightNumber}</strong> to {flight.destination} (
-              {flight.status})
+              {flight.flightNumber} to {flight.destination} ({flight.status})
             </p>
-            <p>
-              <small>ID: {flight._id}</small>
-            </p>
+            <p>ID: {flight._id}</p>
 
-            <button onClick={() => handleUpdateAll(flight._id)}>
-              Update with Form Data
-            </button>
+            <button onClick={() => handleEditInit(flight)}>Edit</button>
 
             <button onClick={() => handleDelete(flight._id)}>Delete</button>
           </div>
