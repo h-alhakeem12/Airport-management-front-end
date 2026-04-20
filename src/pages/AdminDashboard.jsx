@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { BASE_URL } from "../global"
 import AdminSidebar from "../components/AdminSidebar"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
+import Flight from "./FlightManager"
 
 const AdminDashboard = () => {
   const [staffCount, setStaffCount] = useState(0)
@@ -38,18 +39,38 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div >
+    <div>
       <AdminSidebar />
       <div>
         <h1>Admin Dashboard</h1>
 
         <div>
-          <h3>Total Staff: {staffCount}</h3>
-          <h3>Total Flights: {flightsCount}</h3>
-          <h3>Total Tasks: {tasksCount}</h3>
-          <h3>Active Terminals: {terminalsCount}</h3>
-        </div>
+          <div>
+            <h3>Total Staff: {staffCount}</h3>
+            <Link to="/admin/staff">
+              <button>Manage Staff</button>
+            </Link>
+          </div>
 
+          <div>
+            <h3>Total Flights: {flightsCount}</h3>
+            <Link to="flights">
+              <button>Manage Flights</button>
+            </Link>
+          </div>
+          <div>
+            <h3>Total Tasks: {tasksCount}</h3>
+            <Link to="/admin/tasks">
+              <button>Manage Tasks</button>
+            </Link>
+          </div>
+          <div>
+            <h3>Active Terminals: {terminalsCount}</h3>
+            <Link to="/admin/terminals">
+              <button>Manage Terminals</button>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   )
