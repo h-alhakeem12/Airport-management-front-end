@@ -11,29 +11,24 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.post(`${BASE_URL}auth/login`, {
-        email,
-        password
-      })
-
+      const response = await axios.post(`${BASE_URL}auth/login`, { email, password })
       localStorage.setItem("userToken", response.data.token)
       localStorage.setItem("userRole", response.data.user.role)
       localStorage.setItem("userName", response.data.user.name)
+      localStorage.setItem("userId", response.data.user.id)
 
       if (response.data.user.role === "admin") {
         navigate("/AdminDashboard")
       } else {
         navigate("/StaffDashboard")
       }
-
     } catch (error) {
-      console.error(error)
       alert("Invalid email or password")
     }
   }
 
   return (
-    <div>
+    <div className="login-container">
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
@@ -43,5 +38,4 @@ const Login = () => {
     </div>
   )
 }
-
 export default Login
