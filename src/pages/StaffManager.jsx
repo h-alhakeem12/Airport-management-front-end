@@ -1,31 +1,178 @@
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios"
-import { BASE_URL } from "../global"
+import { BASE_URL } from "../global.js"
+
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+  role: "",
+  jobTitle: "",
+}
 
 const StaffManager = () => {
-  const [staff, setStaff] = useState([])
+  const [staffs, setStaff] = useState([])
+  const [message, setMessage] = useState("")
+
+  const [formData, setFormData] = useState(initialState)
+  const [editingId, setEditingId] = useState(null)
 
   const getStaff = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}staff`)
-      setStaff(res.data)
-    } catch (error) { console.error(error) }
+      const response = await axios.get(`${BASE_URL}staff`)
+      setStaff(response.data)
+    } catch (error) {
+      console.error("error getting staffs", error)
+    }
   }
 
-  useEffect(() => { getStaff() }, [])
+  useEffect(() => {
+    getStaff()
+  }, [])
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+  const handleEditInit = (staff) => {
+    setEditingId(staff._id)
+    setFormData({
+      name: staff.name,
+      email: staff.email,
+      password: staff.password,
+      role: staff.role,
+      jobTitle: staff.jobTitle,
+    })
+  }
+
+  const handleCreate = async (e) => {
+    e.preventDefault()
+    const token = localStorage.getItem("token")
+
+    try {
+      await axios.post(`${BASE_URL}staff/`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      setMessage("Staff created successfully!")
+      getStaff()
+    } catch (error) {
+      console.error(error)
+      setMessage("Failed to create staff.")
+    }
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${BASE_URL}staff/${id}`)
+      setMessage("staff deleted successfully")
+      getStaff()
+    } catch (error) {
+      setMessage("Error deleting staff")
+    }
+  }
+
+  const handleUpdate = async (e) => {
+    e.preventDefault()
+    try {
+      await axios.put(`${BASE_URL}staff/${editingId}`, formData)
+
+      setMessage("Staff updated successfully!")
+      setEditingId(null)
+      setFormData(initialState)
+      getStaff()
+    } catch (error) {
+      console.error(error)
+      setMessage("Update failed. Check your permissions or fields.")
+    }
+  }
+  const cancelEdit = () => {
+    setEditingId(null)
+    setFormData(initialState)
+    setMessage("")
+  }
 
   return (
-    <div className="p-20">
+    <div className="flight-manager">
       <h2>Staff Management</h2>
-      <div className="grid">
-        {staff.map((s) => (
-          <div key={s._id} className="card">
-            <h4>{s.name}</h4>
-            <p>{s.email}</p>
+      <h3>{editingId ? "Update Staff Mode" : "Register New staff"}</h3>
+
+      {message && <p>{message}</p>}
+
+      <form onSubmit={editingId ? handleUpdate : handleCreate}>
+        <input
+          name="name"
+          placeholder="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="email"
+          placeholder="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="password"
+          placeholder="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+
+        <input
+          name="role"
+          placeholder="role"
+          value={formData.role}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="jobTitle"
+          placeholder="Job Title"
+          value={formData.jobTitle}
+          onChange={handleChange}
+          required
+        />
+
+        {!editingId ? (
+          <button type="submit">Create Staff</button>
+        ) : (
+          <div>
+            <button type="submit">Confirm Update</button>
+            <button type="button" onClick={cancelEdit}>
+              Cancel Edit
+            </button>
           </div>
-        ))}
+        )}
+      </form>
+
+      <hr />
+
+      <h3>Staff List</h3>
+      <div>
+        {staffs.length > 0 ? (
+          staffs.map((staff) => (
+            <div key={staff._id}>
+              <p>Name: {staff.name}</p>
+              <p>Email: {staff.email}</p>
+              <p>Role: {staff.role}</p>
+              <p>Job title: {staff.jobTitle}</p>
+
+              <button onClick={() => handleEditInit(staff)}>Edit</button>
+              <button onClick={() => handleDelete(staff._id)}>Delete</button>
+
+              <hr />
+            </div>
+          ))
+        ) : (
+          <p>No staff members found.</p>
+        )}
       </div>
     </div>
   )
 }
+
 export default StaffManager
