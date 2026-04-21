@@ -202,7 +202,7 @@ const Flight = () => {
               {flight.flightNumber} to {flight.destination} ({flight.status})
             </p>
             <p>Date:{flight.departureTime}</p>
-            <p>ID: {flight._id}</p>
+            <p>Flight ID: {flight._id}</p>
             <p>Pilot: {flight.pilot?.name}</p>
             <p>Terminal: {flight.terminal?.terminalName}</p>
             <p>Admin: {flight.createdBy?.name}</p>
