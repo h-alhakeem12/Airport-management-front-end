@@ -1,10 +1,7 @@
 import "./App.css"
 import "./Sidebar.css"
 import { Routes, Route, useLocation, Navigate } from "react-router-dom"
-import { Routes, Route } from "react-router-dom"
-import StaffManage from "./pages/StaffManage"
 
-import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import Login from "./pages/Login"
 import AdminDashboard from "./pages/AdminDashboard"
@@ -31,16 +28,34 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar />
+      <div style={{ display: "flex" }}>
+        {isAdminPath && <AdminSidebar />}
+        {isStaffPath && <StaffSidebar />}
 
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/staff-manage" element={<StaffManage />} />
-        </Routes>
-      </main>
+        <main
+          style={{
+            flex: 1,
+             padding: "20px",
+            marginLeft: isAdminPath || isStaffPath ? "280px" : "0px",
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+
+
+            <Route path="/AdminDashboard" element={<AdminDashboard />} />
+            <Route path="/admin/staff" element={<StaffManager />} />
+            <Route path="/admin/tasks" element={<TaskManager />} />
+            <Route path="/admin/flights" element={<FlightManager />} />
+
+
+            <Route path="/StaffDashboard" element={<StaffDashboard />} />
+            <Route path="/MyTasks" element={<MyTasks />} />
+            <Route path="/MyFlights" element={<MyFlights />} />
+          </Routes>
+        </main>
+      </div>
 
       <Footer />
     </div>

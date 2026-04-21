@@ -12,10 +12,11 @@ const StaffSidebar = () => {
   return (
     <div className="sidebar-container">
       <h3>Staff Panel</h3>
-      <Link className="sidebar-link" to="/StaffDashboard">Dashboard</Link>
-      <Link className="sidebar-link" to="/MyTasks">My Tasks</Link>
-      <Link className="sidebar-link" to="/MyFlights"> My Flights</Link>
-      <button className="logout-button" onClick={handleLogout}> Sign Out</button>
+      <Link className="sidebar-link" to="/StaffDashboard"><LuLayoutDashboard /> Dashboard</Link>
+      <Link className="sidebar-link" to="/MyTasks"><LuClipboardList /> My Tasks</Link>
+      <Link className="sidebar-link" to="/MyFlights"><LuPlane /> My Flights</Link>
+      <button className="logout-button" onClick={handleLogout}><LuLogOut /> Logout</button>
+
     </div>
   )
 }

@@ -59,39 +59,50 @@ const StaffDashboard = () => {
   }
 
   return (
-    <div>
-      <h1>Staff Dashboard</h1>
+  <div className="dashboard-container">
+    <h1 className="dashboard-title">Staff Dashboard</h1>
 
-      <div>
+    <div className="stats-grid">
+      <div className="card">
         <h3>My Tasks: {tasks.length}</h3>
-        <h3>My Flights: {flights.length}</h3>
       </div>
 
-      <h2>Today's Tasks</h2>
+      <div className="card">
+        <h3>My Flights: {flights.length}</h3>
+      </div>
+    </div>
+
+    <h2 className="section-title">Today's Tasks</h2>
+
+    <div className="list">
       {todayTasks.length === 0 ? (
         <p>No tasks today</p>
       ) : (
         todayTasks.map((task) => (
-          <div key={task._id}>
+          <div className="list-item" key={task._id}>
             <h4>{task.title}</h4>
             <p>{task.status}</p>
           </div>
         ))
       )}
+    </div>
 
-      <h2>Today's Flights</h2>
+    <h2 className="section-title">Today's Flights</h2>
+
+    <div className="list">
       {todayFlights.length === 0 ? (
         <p>No flights today</p>
       ) : (
         todayFlights.map((flight) => (
-          <div key={flight._id}>
+          <div className="list-item" key={flight._id}>
             <h4>{flight.flightNumber}</h4>
             <p>{flight.destination}</p>
           </div>
         ))
       )}
     </div>
-  )
+  </div>
+)
 }
 
 export default StaffDashboard
