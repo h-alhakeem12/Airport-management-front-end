@@ -37,42 +37,43 @@ const AdminDashboard = () => {
     }
   }
 
-  return (
-    <div className="dashboard-container">
-      <AdminSidebar />
-      <h1>Admin Dashboard</h1>
+ return (
+  <div className="dashboard-container">
+    <AdminSidebar />
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <h3>Total Staff: {staffCount}</h3>
-          <Link to="/admin/staff">
-            <button>Manage Staff</button>
-          </Link>
-        </div>
+    <h1 className="dashboard-title">Admin Dashboard</h1>
 
-        <div className="stat-card">
-          <h3>Total Flights: {flightsCount}</h3>
-          <Link to="/admin/flights">
-            <button>Manage Flights</button>
-          </Link>
-        </div>
+    <div className="stats-grid">
+      <div className="card">
+        <h3>Total Staff: {staffCount}</h3>
+        <Link to="/admin/staff">
+          <button className="btn">Manage Staff</button>
+        </Link>
+      </div>
 
-        <div className="stat-card">
-          <h3>Total Tasks: {tasksCount}</h3>
-          <Link to="/admin/tasks">
-            <button>Manage Tasks</button>
-          </Link>
-        </div>
+      <div className="card">
+        <h3>Total Flights: {flightsCount}</h3>
+        <Link to="/admin/flights">
+          <button className="btn">Manage Flights</button>
+        </Link>
+      </div>
 
-        <div className="stat-card">
-          <h3>Active Terminals: {terminalsCount}</h3>
-          <Link to="/TerminalManager">
-            <button>Manage Terminals</button>
-          </Link>
-        </div>
+      <div className="card">
+        <h3>Total Tasks: {tasksCount}</h3>
+        <Link to="/admin/tasks">
+          <button className="btn">Manage Tasks</button>
+        </Link>
+      </div>
+
+      <div className="card">
+        <h3>Active Terminals: {terminalsCount}</h3>
+        <Link to="/TerminalManager">
+          <button className="btn">Manage Terminals</button>
+        </Link>
       </div>
     </div>
-  )
+  </div>
+)
 }
 
 export default AdminDashboard

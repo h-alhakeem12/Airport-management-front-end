@@ -15,8 +15,7 @@ const StaffSidebar = () => {
       <Link className="sidebar-link" to="/StaffDashboard"><LuLayoutDashboard /> Dashboard</Link>
       <Link className="sidebar-link" to="/MyTasks"><LuClipboardList /> My Tasks</Link>
       <Link className="sidebar-link" to="/MyFlights"><LuPlane /> My Flights</Link>
-      <button className="logout-button" onClick={handleLogout}><LuLogOut /> Sign Out</button>
-      <button className="logout-button" onClick={handleLogout}><LuLogOut /> Sign Out</button>
+      <button className="logout-button" onClick={handleLogout}><LuLogOut /> Logout</button>
 
     </div>
   )

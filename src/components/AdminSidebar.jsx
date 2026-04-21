@@ -16,11 +16,9 @@ const AdminSidebar = () => {
       <Link className="sidebar-link" to="/admin/staff"><LuUsers /> Staff Manager</Link>
       <Link className="sidebar-link" to="/admin/tasks"><LuClipboardList /> Task Manager</Link>
       <Link className="sidebar-link" to="/admin/flights"><LuPlane /> Flight Manager</Link>
-      <button className="logout-button" onClick={handleLogout}><LuLogOut />  Sign Out</button>
-      <button className="logout-button" onClick={handleLogout}><LuLogOut /> Sign Out</button>
+      <button className="logout-button" onClick={handleLogout}><LuLogOut /> Logout</button>
 
     </div>
   )
 }
 export default AdminSidebar
- 

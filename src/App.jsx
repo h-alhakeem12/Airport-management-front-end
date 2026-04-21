@@ -36,7 +36,7 @@ function App() {
           style={{
             flex: 1,
              padding: "20px",
-            marginLeft: isAdminPath || isStaffPath ? "350px" : "0px",
+            marginLeft: isAdminPath || isStaffPath ? "280px" : "0px",
           }}
         >
           <Routes>
