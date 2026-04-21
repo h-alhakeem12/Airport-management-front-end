@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios"
-import { BASE_URL } from "../global"
+import { BASE_URL } from "../global.js"
 
 const initialState = {
   title: "",
@@ -10,10 +10,10 @@ const initialState = {
   flight: "",
 }
 
-const TaskManager = () => {
+const TaskManage = () => {
   const [tasks, setTasks] = useState([])
   const [staff, setStaff] = useState([])
-  const [flight, setFlights] = useState([])
+  const [flights, setFlights] = useState([])
   const [message, setMessage] = useState("")
 
   const [formData, setFormData] = useState(initialState)
@@ -23,11 +23,11 @@ const TaskManager = () => {
     try {
       const response = await axios.get(`${BASE_URL}tasks`)
       const staffResponse = await axios.get(`${BASE_URL}staff`)
-      const flightResponse = await axios.get(`${BASE_URL}flights`)
+      const flightsResponse = await axios.get(`${BASE_URL}flights`)
 
       setTasks(response.data)
-      setStaff(response.data)
-      setFlights(response.data)
+      setStaff(staffResponse.data)
+      setFlights(flightsResponse.data)
     } catch (error) {
       console.error("error getting tasks", error)
       setMessage("Error getting tasks")
@@ -38,18 +38,27 @@ const TaskManager = () => {
     getTasks()
   }, [])
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
   const handleEditInit = (task) => {
     setEditingId(task._id)
     setFormData({
       title: task.title || "",
       description: task.description || "",
-      status: task.status || "pending",
+      status: task.status || "Pending",
       assignedTo:
-        typeof task.assignedTo === "object" && task.flight !== null
+        typeof task.assignedTo === "object" && task.assignedTo !== null
           ? task.assignedTo._id
+          : task.assignedTo || "",
+      flight:
+        typeof task.flight === "object" && task.flight !== null
+          ? task.flight._id
           : task.flight || "",
     })
   }
+
   const handleCreate = async (e) => {
     e.preventDefault()
     try {
@@ -76,10 +85,12 @@ const TaskManager = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault()
+
     try {
       await axios.put(`${BASE_URL}tasks/${editingId}`, formData)
       setMessage("Task updated completely!")
       setEditingId(null)
+      setFormData(initialState)
       getTasks()
     } catch (error) {
       console.error("error updating task", error)
@@ -186,4 +197,4 @@ const TaskManager = () => {
   )
 }
 
-export default TaskManager
+export default TaskManage

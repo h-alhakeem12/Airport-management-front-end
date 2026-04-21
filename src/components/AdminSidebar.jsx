@@ -5,6 +5,7 @@ import {
   LuClipboardList,
   LuPlane,
   LuLogOut,
+  LuTerminal,
 } from "react-icons/lu"
 const AdminSidebar = () => {
   const navigate = useNavigate()
@@ -26,8 +27,11 @@ const AdminSidebar = () => {
       <Link className="sidebar-link" to="/admin/tasks">
         <LuClipboardList /> Task Manager
       </Link>
-      <Link className="sidebar-link" to="/flights">
+      <Link className="sidebar-link" to="admin/flights">
         <LuPlane /> Flight Manager
+      </Link>
+      <Link className="sidebar-link" to="admin/terminal">
+        <LuTerminal /> Terminal Manager
       </Link>
       <button className="logout-button" onClick={handleLogout}>
         <LuLogOut /> Logout

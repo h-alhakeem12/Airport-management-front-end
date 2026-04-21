@@ -6,6 +6,7 @@ const initialState = {
   name: "",
   email: "",
   password: "",
+  urlPicture: "",
   role: "",
   jobTitle: "",
 }
@@ -39,6 +40,7 @@ const StaffManager = () => {
       name: staff.name,
       email: staff.email,
       password: staff.password,
+      urlPicture: staff.urlPicture,
       role: staff.role,
       jobTitle: staff.jobTitle,
     })
@@ -118,6 +120,13 @@ const StaffManager = () => {
           name="password"
           placeholder="password"
           value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="urlPicture"
+          placeholder="urlPicture"
+          value={formData.urlPicture}
           onChange={handleChange}
           required
         />

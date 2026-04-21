@@ -6,9 +6,12 @@ import {
   LuPlane,
   LuLogOut,
 } from "react-icons/lu"
+import axios from "axios"
+import { BASE_URL } from "../global"
 
 const StaffSidebar = () => {
   const navigate = useNavigate()
+
   const handleLogout = () => {
     localStorage.clear()
     navigate("/login")
@@ -17,6 +20,7 @@ const StaffSidebar = () => {
   return (
     <div className="sidebar-container">
       <h3>Staff Panel</h3>
+
       <Link className="sidebar-link" to="/StaffDashboard">
         <LuLayoutDashboard /> Dashboard
       </Link>

@@ -11,6 +11,7 @@ import MyFlights from "./pages/MyFlights"
 import FlightManager from "./pages/FlightManager"
 import StaffManager from "./pages/StaffManager"
 import TaskManager from "./pages/TaskManager"
+import TerminalManager from "./pages/TerminalManger"
 import AdminSidebar from "./components/AdminSidebar"
 import StaffSidebar from "./components/StaffSidebar"
 
@@ -48,6 +49,7 @@ function App() {
             <Route path="/admin/staff" element={<StaffManager />} />
             <Route path="/admin/tasks" element={<TaskManager />} />
             <Route path="/admin/flights" element={<FlightManager />} />
+            <Route path="/admin/terminal" element={<TerminalManager />} />
 
             <Route path="/StaffDashboard" element={<StaffDashboard />} />
             <Route path="/MyTasks" element={<MyTasks />} />
