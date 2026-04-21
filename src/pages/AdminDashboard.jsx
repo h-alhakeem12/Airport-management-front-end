@@ -40,34 +40,35 @@ const AdminDashboard = () => {
   return (
     <div className="dashboard-container">
       <AdminSidebar />
-      <h1>Admin Dashboard</h1>
+
+      <h1 className="dashboard-title">Admin Dashboard</h1>
 
       <div className="stats-grid">
-        <div className="stat-card">
+        <div className="card">
           <h3>Total Staff: {staffCount}</h3>
-          <Link to="/StaffManager">
-            <button>Manage Staff</button>
+          <Link to="/admin/staff">
+            <button className="btn">Manage Staff</button>
           </Link>
         </div>
 
-        <div className="stat-card">
+        <div className="card">
           <h3>Total Flights: {flightsCount}</h3>
-          <Link to="/flights">
-            <button>Manage Flights</button>
+          <Link to="/admin/flights">
+            <button className="btn">Manage Flights</button>
           </Link>
         </div>
 
-        <div className="stat-card">
+        <div className="card">
           <h3>Total Tasks: {tasksCount}</h3>
-          <Link to="/TaskManager">
-            <button>Manage Tasks</button>
+          <Link to="/admin/tasks">
+            <button className="btn">Manage Tasks</button>
           </Link>
         </div>
 
-        <div className="stat-card">
+        <div className="card">
           <h3>Active Terminals: {terminalsCount}</h3>
           <Link to="/TerminalManager">
-            <button>Manage Terminals</button>
+            <button className="btn">Manage Terminals</button>
           </Link>
         </div>
       </div>
