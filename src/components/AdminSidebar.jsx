@@ -18,6 +18,7 @@ const AdminSidebar = () => {
   return (
     <div>
       <h3>Admin Panel</h3>
+<<<<<<< HEAD
       <Link className="sidebar-link" to="/AdminDashboard">
         <LuLayoutDashboard /> Dashboard
       </Link>
@@ -36,6 +37,13 @@ const AdminSidebar = () => {
       <button className="logout-button" onClick={handleLogout}>
         <LuLogOut /> Logout
       </button>
+=======
+      <Link className="sidebar-link" to="/AdminDashboard">Dashboard</Link>
+      <Link className="sidebar-link" to="/admin/staff"> Staff Manager</Link>
+      <Link className="sidebar-link" to="/admin/tasks"> Task Manager</Link>
+      <Link className="sidebar-link" to="/admin/flights"> Flight Manager</Link>
+      <button className="logout-button" onClick={handleLogout}> Sign Out</button>
+>>>>>>> b0077b3a8c901ffaa90d4684a8701ac71c85ec20
     </div>
   )
 }

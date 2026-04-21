@@ -7,6 +7,11 @@ import Login from "./pages/Login"
 import AdminDashboard from "./pages/AdminDashboard"
 import StaffDashboard from "./pages/StaffDashboard"
 import MyTasks from "./pages/MyTasks"
+<<<<<<< HEAD
+=======
+import Flight from "./pages/FlightManager"
+import StaffManager from "./pages/StaffManager"
+>>>>>>> b0077b3a8c901ffaa90d4684a8701ac71c85ec20
 import MyFlights from "./pages/MyFlights"
 import FlightManager from "./pages/FlightManager"
 import StaffManager from "./pages/StaffManager"

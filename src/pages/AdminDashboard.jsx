@@ -2,7 +2,11 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { BASE_URL } from "../global"
 import AdminSidebar from "../components/AdminSidebar"
+<<<<<<< HEAD
 import { useNavigate, Link } from "react-router-dom"
+=======
+import { Link, useNavigate } from "react-router-dom"
+>>>>>>> b0077b3a8c901ffaa90d4684a8701ac71c85ec20
 
 const AdminDashboard = () => {
   const [staffCount, setStaffCount] = useState(0)
@@ -38,6 +42,7 @@ const AdminDashboard = () => {
   }
 
   return (
+<<<<<<< HEAD
     <div className="dashboard-container">
       <h1 className="dashboard-title">Admin Dashboard</h1>
 
@@ -67,6 +72,30 @@ const AdminDashboard = () => {
           <h3>Active Terminals: {terminalsCount}</h3>
           <Link to="/TerminalManager">
             <button className="btn">Manage Terminals</button>
+=======
+    <div>
+      <h1>Admin Dashboard</h1>
+
+      <div>
+        <div>
+          <h3>Total Staff: {counts.staff}</h3>
+          <Link to="/admin/staff">
+            <button>Manage</button>
+          </Link>
+        </div>
+
+        <div>
+          <h3>Total Flights: {counts.flights}</h3>
+          <Link to="/admin/flights">
+            <button>Manage</button>
+          </Link>
+        </div>
+
+        <div>
+          <h3>Total Tasks: {counts.tasks}</h3>
+          <Link to="/admin/tasks">
+            <button>Manage</button>
+>>>>>>> b0077b3a8c901ffaa90d4684a8701ac71c85ec20
           </Link>
         </div>
       </div>
