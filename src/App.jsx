@@ -2,7 +2,6 @@ import "./App.css"
 import "./Sidebar.css"
 import { Routes, Route, useLocation, Navigate } from "react-router-dom"
 
-import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import Login from "./pages/Login"
 import AdminDashboard from "./pages/AdminDashboard"
@@ -29,8 +28,6 @@ function App() {
 
   return (
     <div className="App">
-      {!isLoginPage && <Navbar />}
-
       <div style={{ display: "flex" }}>
         {isAdminPath && <AdminSidebar />}
         {isStaffPath && <StaffSidebar />}
@@ -38,7 +35,8 @@ function App() {
         <main
           style={{
             flex: 1,
-            marginLeft: isAdminPath || isStaffPath ? "260px" : "0px",
+             padding: "20px",
+            marginLeft: isAdminPath || isStaffPath ? "350px" : "0px",
           }}
         >
           <Routes>
