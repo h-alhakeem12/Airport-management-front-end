@@ -1,9 +1,17 @@
 import { Link, useNavigate } from "react-router-dom"
 import "../Sidebar.css"
-import { LuLayoutDashboard, LuClipboardList, LuPlane, LuLogOut } from "react-icons/lu"
+import {
+  LuLayoutDashboard,
+  LuClipboardList,
+  LuPlane,
+  LuLogOut,
+} from "react-icons/lu"
+import axios from "axios"
+import { BASE_URL } from "../global"
 
 const StaffSidebar = () => {
   const navigate = useNavigate()
+
   const handleLogout = () => {
     localStorage.clear()
     navigate("/login")
@@ -12,11 +20,19 @@ const StaffSidebar = () => {
   return (
     <div className="sidebar-container">
       <h3>Staff Panel</h3>
-      <Link className="sidebar-link" to="/StaffDashboard"><LuLayoutDashboard /> Dashboard</Link>
-      <Link className="sidebar-link" to="/MyTasks"><LuClipboardList /> My Tasks</Link>
-      <Link className="sidebar-link" to="/MyFlights"><LuPlane /> My Flights</Link>
-      <button className="logout-button" onClick={handleLogout}><LuLogOut /> Logout</button>
 
+      <Link className="sidebar-link" to="/StaffDashboard">
+        <LuLayoutDashboard /> Dashboard
+      </Link>
+      <Link className="sidebar-link" to="/MyTasks">
+        <LuClipboardList /> My Tasks
+      </Link>
+      <Link className="sidebar-link" to="/MyFlights">
+        <LuPlane /> My Flights
+      </Link>
+      <button className="logout-button" onClick={handleLogout}>
+        <LuLogOut /> Logout
+      </button>
     </div>
   )
 }

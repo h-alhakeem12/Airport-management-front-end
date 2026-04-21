@@ -11,7 +11,10 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.post(`${BASE_URL}auth/login`, { email, password })
+      const response = await axios.post(`${BASE_URL}auth/login`, {
+        email,
+        password,
+      })
       localStorage.setItem("userToken", response.data.token)
       localStorage.setItem("userRole", response.data.user.role)
       localStorage.setItem("userName", response.data.user.name)
@@ -27,31 +30,31 @@ const Login = () => {
     }
   }
 
- return (
-  <div className="login-page">
-<h1 className="title">AERO MANAGEMENT SYSTEM</h1>    <div className="login-card">
+  return (
+    <div className="login-page">
+      <h1 className="title">AERO MANAGEMENT SYSTEM</h1>{" "}
+      <div className="login-card">
+        <h1>LOGIN</h1>
 
-<h1>LOGIN</h1>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        <button type="submit">Login</button>
-      </form>
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
-  </div>
-)
+  )
 }
 export default Login

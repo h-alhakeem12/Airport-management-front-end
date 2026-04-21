@@ -11,13 +11,15 @@ import MyFlights from "./pages/MyFlights"
 import FlightManager from "./pages/FlightManager"
 import StaffManager from "./pages/StaffManager"
 import TaskManager from "./pages/TaskManager"
+import TerminalManager from "./pages/TerminalManger"
 import AdminSidebar from "./components/AdminSidebar"
 import StaffSidebar from "./components/StaffSidebar"
 
 function App() {
   const location = useLocation()
 
-  const isLoginPage = location.pathname === "/login" || location.pathname === "/"
+  const isLoginPage =
+    location.pathname === "/login" || location.pathname === "/"
   const isAdminPath =
     location.pathname.startsWith("/admin") ||
     location.pathname === "/AdminDashboard"
@@ -35,7 +37,7 @@ function App() {
         <main
           style={{
             flex: 1,
-             padding: "20px",
+            padding: "20px",
             marginLeft: isAdminPath || isStaffPath ? "280px" : "0px",
           }}
         >
@@ -43,12 +45,11 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
 
-
             <Route path="/AdminDashboard" element={<AdminDashboard />} />
             <Route path="/admin/staff" element={<StaffManager />} />
             <Route path="/admin/tasks" element={<TaskManager />} />
             <Route path="/admin/flights" element={<FlightManager />} />
-
+            <Route path="/admin/terminal" element={<TerminalManager />} />
 
             <Route path="/StaffDashboard" element={<StaffDashboard />} />
             <Route path="/MyTasks" element={<MyTasks />} />
