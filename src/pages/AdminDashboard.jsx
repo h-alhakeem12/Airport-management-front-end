@@ -39,7 +39,7 @@ const AdminDashboard = () => {
 
  return (
   <div className="dashboard-container">
-    <AdminSidebar />
+  
 
     <h1 className="dashboard-title">Admin Dashboard</h1>
 

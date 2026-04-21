@@ -20,14 +20,15 @@ const MyFlights = () => {
           Authorization: `Bearer ${token}`,
         },
       })
+
+      console.log("USER:", user)
+      console.log("FLIGHTS:", response.data)
+
       const filteredFlights = response.data.filter((flight) => {
-        if (!user?._id) return false
-
-        if (typeof flight.pilot === "object" && flight.pilot !== null) {
-          return flight.pilot._id === user._id
-        }
-
-        return flight.pilot === user._id
+        return (
+          flight.pilot?._id === user?._id ||
+          flight.pilot === user?._id
+        )
       })
 
       setFlights(filteredFlights)
@@ -36,6 +37,7 @@ const MyFlights = () => {
       setMessage("Error getting flights")
     }
   }
+
   return (
     <div>
       <h1>My Flights</h1>
@@ -48,7 +50,10 @@ const MyFlights = () => {
           <div key={flight._id}>
             <h3>{flight.flightNumber}</h3>
             <p>Destination: {flight.destination}</p>
-            <p>Departure Time: {flight.departureTime}</p>
+            <p>
+              Departure Time:{" "}
+              {new Date(flight.departureTime).toLocaleString()}
+            </p>
             <p>Status: {flight.status}</p>
             <p>
               Terminal:{" "}
