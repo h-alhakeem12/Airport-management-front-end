@@ -14,6 +14,9 @@ const initialState = {
 
 const Flight = () => {
   const [flights, setFlights] = useState([])
+  const [pilots, setPilots] = useState([])
+  const [admins, setAdmins] = useState([])
+  const [terminals, setTerminals] = useState([])
   const [message, setMessage] = useState("")
 
   const [formData, setFormData] = useState(initialState)
@@ -22,7 +25,13 @@ const Flight = () => {
   const getFlights = async () => {
     try {
       const response = await axios.get(`${BASE_URL}flights`)
+      const pilots = await axios.get(`${BASE_URL}staff`)
+      const terminals = await axios.get(`${BASE_URL}terminal`)
+      const admins = await axios.get(`${BASE_URL}staff`)
       setFlights(response.data)
+      setPilots(pilots.data)
+      setTerminals(terminals.data)
+      setAdmins(admins.data)
     } catch (error) {
       console.error("error getting flights", error)
     }
@@ -44,7 +53,7 @@ const Flight = () => {
       status: flight.status,
       pilot: flight.pilot,
       terminal: flight.terminal,
-      createdBy: flight.createdBy,
+      createdBy: flight.admin,
     })
   }
 
@@ -70,9 +79,11 @@ const Flight = () => {
     }
   }
 
-  const handleUpdate = async (id) => {
+  const handleUpdate = async (e) => {
+    e.preventDefault()
+
     try {
-      await axios.put(`${BASE_URL}flights/${id}`, formData)
+      await axios.put(`${BASE_URL}flights/${editingId}`, formData)
       setMessage("Flight updated completely!")
       setEditingId(null)
       setFormData(initialState)
@@ -110,8 +121,9 @@ const Flight = () => {
           required
         />
         <input
+          type="Date"
           name="departureTime"
-          placeholder="Departure Time "
+          placeholder="Departure Time"
           value={formData.departureTime}
           onChange={handleChange}
           required
@@ -123,27 +135,50 @@ const Flight = () => {
           <option value="Departed">Departed</option>
         </select>
 
-        <input
+        <select
           name="pilot"
-          placeholder="Pilot ID"
           value={formData.pilot}
           onChange={handleChange}
           required
-        />
-        <input
+        >
+          <option value="pilot">Select Pilot</option>
+          {pilots
+            .filter((pilot) => pilot.jobTitle === "pilot")
+            .map((pilot) => (
+              <option key={pilot._id} value={pilot._id}>
+                {pilot.name}
+              </option>
+            ))}
+        </select>
+
+        <select
           name="terminal"
-          placeholder="Terminal ID"
           value={formData.terminal}
           onChange={handleChange}
           required
-        />
-        <input
+        >
+          <option value="terminal">Select Terminal</option>
+          {terminals.map((terminal) => (
+            <option key={terminal._id} value={terminal._id}>
+              {terminal.terminalName}
+            </option>
+          ))}
+        </select>
+        <select
           name="createdBy"
-          placeholder="Admin ID"
-          value={formData.createdBy}
+          value={formData.admin}
           onChange={handleChange}
           required
-        />
+        >
+          <option value="admin">Select Admin</option>
+          {admins
+            .filter((admin) => admin.role === "admin")
+            .map((admin) => (
+              <option key={admin._id} value={admin._id}>
+                {admin.name}
+              </option>
+            ))}
+        </select>
 
         {!editingId ? (
           <button type="submit">Create Flight</button>
@@ -166,10 +201,13 @@ const Flight = () => {
             <p>
               {flight.flightNumber} to {flight.destination} ({flight.status})
             </p>
+            <p>Date:{flight.departureTime}</p>
             <p>ID: {flight._id}</p>
+            <p>Pilot: {flight.pilot?.name}</p>
+            <p>Terminal: {flight.terminal?.terminalName}</p>
+            <p>Admin: {flight.createdBy?.name}</p>
 
             <button onClick={() => handleEditInit(flight)}>Edit</button>
-
             <button onClick={() => handleDelete(flight._id)}>Delete</button>
           </div>
         ))}

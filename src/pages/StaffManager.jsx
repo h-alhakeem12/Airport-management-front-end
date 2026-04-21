@@ -46,13 +46,19 @@ const StaffManager = () => {
 
   const handleCreate = async (e) => {
     e.preventDefault()
+    const token = localStorage.getItem("token")
+
     try {
-      await axios.post(`${BASE_URL}staff`, formData)
+      await axios.post(`${BASE_URL}staff/`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      setMessage("Staff created successfully!")
       getStaff()
-      setFormData(initialState)
-      setMessage("staff added successfully")
     } catch (error) {
-      setMessage("Error adding staff")
+      console.error(error)
+      setMessage("Failed to create staff.")
     }
   }
 
@@ -66,15 +72,18 @@ const StaffManager = () => {
     }
   }
 
-  const handleUpdate = async (id) => {
+  const handleUpdate = async (e) => {
+    e.preventDefault()
     try {
-      await axios.put(`${BASE_URL}staff/${id}`, formData)
-      setMessage("staff updated completely!")
+      await axios.put(`${BASE_URL}staff/${editingId}`, formData)
+
+      setMessage("Staff updated successfully!")
       setEditingId(null)
       setFormData(initialState)
       getStaff()
     } catch (error) {
-      setMessage("Update failed. Check all fields.")
+      console.error(error)
+      setMessage("Update failed. Check your permissions or fields.")
     }
   }
   const cancelEdit = () => {
@@ -85,8 +94,8 @@ const StaffManager = () => {
 
   return (
     <div className="flight-manager">
-      <h2>Flight Management</h2>
-      <h3>{editingId ? "Update Flight Mode" : "Register New Flight"}</h3>
+      <h2>Staff Management</h2>
+      <h3>{editingId ? "Update Staff Mode" : "Register New staff"}</h3>
 
       {message && <p>{message}</p>}
 
@@ -129,7 +138,7 @@ const StaffManager = () => {
         />
 
         {!editingId ? (
-          <button type="submit">Create Flight</button>
+          <button type="submit">Create Staff</button>
         ) : (
           <div>
             <button type="submit">Confirm Update</button>
