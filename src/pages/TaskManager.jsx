@@ -141,13 +141,14 @@ const TaskManage = () => {
           required
         >
           <option value="">Select Staff</option>
-          {staff.map((member) => (
-            <option key={member._id} value={member._id}>
-              {member.name}
-            </option>
-          ))}
+          {staff
+            .filter((member) => member.role === "staff")
+            .map((member) => (
+              <option key={member._id} value={member._id}>
+                {member.name}
+              </option>
+            ))}
         </select>
-
         <select
           name="flight"
           value={formData.flight}

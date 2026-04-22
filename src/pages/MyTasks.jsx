@@ -12,14 +12,19 @@ const MyTasks = () => {
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem("userToken")
+      const userId = localStorage.getItem("userId")
 
       const res = await axios.get(`${BASE_URL}tasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
+      console.log(res.data)
+      const filteredTasks = res.data.filter(
+        (task) => task?.assignedTo?._id === userId
+      )
 
-      setTasks(res.data)
+      setTasks(filteredTasks)
     } catch (error) {
       console.error(error)
     }
@@ -31,8 +36,8 @@ const MyTasks = () => {
 
       {tasks.map((task) => (
         <div key={task._id}>
-          <h3>{task.title}</h3>
-          <p>{task.description}</p>
+          <h3>Title: {task.title}</h3>
+          <p>Description: {task.description}</p>
           <p>Status: {task.status}</p>
         </div>
       ))}
