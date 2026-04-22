@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { BASE_URL } from "../global.js"
+import "../Dashboard.css"
 
 const initialState = {
   flightNumber: "",
@@ -24,16 +25,16 @@ const Flight = () => {
 
   const getFlights = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}flights`)
-      const pilots = await axios.get(`${BASE_URL}staff`)
+      const res = await axios.get(`${BASE_URL}flights`)
+      const staff = await axios.get(`${BASE_URL}staff`)
       const terminals = await axios.get(`${BASE_URL}terminal`)
-      const admins = await axios.get(`${BASE_URL}staff`)
-      setFlights(response.data)
-      setPilots(pilots.data)
+
+      setFlights(res.data)
+      setPilots(staff.data)
+      setAdmins(staff.data)
       setTerminals(terminals.data)
-      setAdmins(admins.data)
     } catch (error) {
-      console.error("error getting flights", error)
+      console.error(error)
     }
   }
 
@@ -44,171 +45,119 @@ const Flight = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
-  const handleEditInit = (flight) => {
-    setEditingId(flight._id)
-    setFormData({
-      flightNumber: flight.flightNumber,
-      destination: flight.destination,
-      departureTime: flight.departureTime,
-      status: flight.status,
-      pilot: flight.pilot,
-      terminal: flight.terminal,
-      createdBy: flight.admin,
-    })
-  }
 
   const handleCreate = async (e) => {
     e.preventDefault()
     try {
       await axios.post(`${BASE_URL}flights`, formData)
-      getFlights()
+      setMessage("Flight created!")
       setFormData(initialState)
-      setMessage("Flight added successfully")
-    } catch (error) {
-      setMessage("Error adding flight")
+      getFlights()
+    } catch {
+      setMessage("Create failed")
     }
   }
 
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${BASE_URL}flights/${id}`)
-      setMessage("Flight deleted successfully")
-      getFlights()
-    } catch (error) {
-      setMessage("Error deleting flight")
-    }
+    await axios.delete(`${BASE_URL}flights/${id}`)
+    getFlights()
+  }
+
+  const handleEditInit = (f) => {
+    setEditingId(f._id)
+    setFormData({
+      flightNumber: f.flightNumber,
+      destination: f.destination,
+      departureTime: f.departureTime,
+      status: f.status,
+      pilot: f.pilot?._id,
+      terminal: f.terminal?._id,
+      createdBy: f.createdBy?._id,
+    })
   }
 
   const handleUpdate = async (e) => {
     e.preventDefault()
-
-    try {
-      await axios.put(`${BASE_URL}flights/${editingId}`, formData)
-      setMessage("Flight updated completely!")
-      setEditingId(null)
-      setFormData(initialState)
-      getFlights()
-    } catch (error) {
-      setMessage("Update failed. Check all fields.")
-    }
+    await axios.put(`${BASE_URL}flights/${editingId}`, formData)
+    setEditingId(null)
+    setFormData(initialState)
+    getFlights()
   }
+
   const cancelEdit = () => {
     setEditingId(null)
     setFormData(initialState)
-    setMessage("")
   }
 
   return (
-    <div className="flight-manager">
-      <h2>Flight Management</h2>
-      <h3>{editingId ? "Update Flight Mode" : "Register New Flight"}</h3>
+    <div className="dashboard-container">
+      <h2 className="dashboard-title">Flight Management</h2>
 
-      {message && <p>{message}</p>}
+      {message && <p className="message">{message}</p>}
 
-      <form onSubmit={editingId ? handleUpdate : handleCreate}>
-        <input
-          name="flightNumber"
-          placeholder="Flight Number"
-          value={formData.flightNumber}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="destination"
-          placeholder="Destination"
-          value={formData.destination}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="Date"
-          name="departureTime"
-          placeholder="Departure Time"
-          value={formData.departureTime}
-          onChange={handleChange}
-          required
-        />
+      <div className="card">
+        <form onSubmit={editingId ? handleUpdate : handleCreate}>
 
-        <select name="status" value={formData.status} onChange={handleChange}>
-          <option value="Scheduled">Scheduled</option>
-          <option value="Delayed">Delayed</option>
-          <option value="Departed">Departed</option>
-        </select>
+          <div className="form-group"><input name="flightNumber" placeholder="Flight Number" value={formData.flightNumber} onChange={handleChange} required /></div>
+          <div className="form-group"><input name="destination" placeholder="Destination" value={formData.destination} onChange={handleChange} required /></div>
+          <div className="form-group"><input type="date" name="departureTime" value={formData.departureTime} onChange={handleChange} required /></div>
 
-        <select
-          name="pilot"
-          value={formData.pilot}
-          onChange={handleChange}
-          required
-        >
-          <option value="pilot">Select Pilot</option>
-          {pilots
-            .filter((pilot) => pilot.jobTitle === "pilot")
-            .map((pilot) => (
-              <option key={pilot._id} value={pilot._id}>
-                {pilot.name}
-              </option>
-            ))}
-        </select>
-
-        <select
-          name="terminal"
-          value={formData.terminal}
-          onChange={handleChange}
-          required
-        >
-          <option value="terminal">Select Terminal</option>
-          {terminals.map((terminal) => (
-            <option key={terminal._id} value={terminal._id}>
-              {terminal.terminalName}
-            </option>
-          ))}
-        </select>
-        <select
-          name="createdBy"
-          value={formData.admin}
-          onChange={handleChange}
-          required
-        >
-          <option value="admin">Select Admin</option>
-          {admins
-            .filter((admin) => admin.role === "admin")
-            .map((admin) => (
-              <option key={admin._id} value={admin._id}>
-                {admin.name}
-              </option>
-            ))}
-        </select>
-
-        {!editingId ? (
-          <button type="submit">Create Flight</button>
-        ) : (
-          <div>
-            <button type="submit">Confirm Update</button>
-            <button type="button" onClick={cancelEdit}>
-              Cancel Edit
-            </button>
+          <div className="form-group">
+            <select name="status" value={formData.status} onChange={handleChange}>
+              <option>Scheduled</option>
+              <option>Delayed</option>
+              <option>Departed</option>
+            </select>
           </div>
-        )}
-      </form>
 
-      <hr />
+          {/* 🔥 المهم */}
+          <div className="form-group">
+            <select name="pilot" value={formData.pilot} onChange={handleChange} required>
+              <option value="">Select Pilot</option>
+              {pilots.filter(p => p.jobTitle === "pilot").map(p => (
+                <option key={p._id} value={p._id}>{p.name}</option>
+              ))}
+            </select>
+          </div>
 
-      <h3>Flight List</h3>
-      <div className="flight-list">
-        {flights.map((flight) => (
-          <div key={flight._id}>
-            <p>
-              {flight.flightNumber} to {flight.destination} ({flight.status})
-            </p>
-            <p>Date:{flight.departureTime}</p>
-            <p>Flight ID: {flight._id}</p>
-            <p>Pilot: {flight.pilot?.name}</p>
-            <p>Terminal: {flight.terminal?.terminalName}</p>
-            <p>Admin: {flight.createdBy?.name}</p>
+          <div className="form-group">
+            <select name="terminal" value={formData.terminal} onChange={handleChange} required>
+              <option value="">Select Terminal</option>
+              {terminals.map(t => (
+                <option key={t._id} value={t._id}>{t.terminalName}</option>
+              ))}
+            </select>
+          </div>
 
-            <button onClick={() => handleEditInit(flight)}>Edit</button>
-            <button onClick={() => handleDelete(flight._id)}>Delete</button>
+          <div className="form-group">
+            <select name="createdBy" value={formData.createdBy} onChange={handleChange} required>
+              <option value="">Select Admin</option>
+              {admins.filter(a => a.role === "admin").map(a => (
+                <option key={a._id} value={a._id}>{a.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {!editingId ? (
+            <button className="btn-primary">Create</button>
+          ) : (
+            <>
+              <button className="btn-primary">Update</button>
+              <button type="button" className="btn-secondary" onClick={cancelEdit}>Cancel</button>
+            </>
+          )}
+        </form>
+      </div>
+
+      <div className="list">
+        {flights.map(f => (
+          <div className="list-item" key={f._id}>
+            <p>{f.flightNumber}</p>
+            <p>{f.destination}</p>
+            <p>{f.status}</p>
+
+            <button className="btn-primary" onClick={() => handleEditInit(f)}>Edit</button>
+            <button className="btn-danger" onClick={() => handleDelete(f._id)}>Delete</button>
           </div>
         ))}
       </div>

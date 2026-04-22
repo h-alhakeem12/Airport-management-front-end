@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { BASE_URL } from "../global.js"
+import "../Dashboard.css"
 
 const initialState = {
   name: "",
@@ -23,7 +24,7 @@ const StaffManager = () => {
       const response = await axios.get(`${BASE_URL}staff`)
       setStaff(response.data)
     } catch (error) {
-      console.error("error getting staffs", error)
+      console.error(error)
     }
   }
 
@@ -34,6 +35,7 @@ const StaffManager = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
+
   const handleEditInit = (staff) => {
     setEditingId(staff._id)
     setFormData({
@@ -52,14 +54,12 @@ const StaffManager = () => {
 
     try {
       await axios.post(`${BASE_URL}staff/`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       })
       setMessage("Staff created successfully!")
+      setFormData(initialState)
       getStaff()
     } catch (error) {
-      console.error(error)
       setMessage("Failed to create staff.")
     }
   }
@@ -67,10 +67,10 @@ const StaffManager = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${BASE_URL}staff/${id}`)
-      setMessage("staff deleted successfully")
+      setMessage("Deleted successfully")
       getStaff()
-    } catch (error) {
-      setMessage("Error deleting staff")
+    } catch {
+      setMessage("Error deleting")
     }
   }
 
@@ -78,16 +78,15 @@ const StaffManager = () => {
     e.preventDefault()
     try {
       await axios.put(`${BASE_URL}staff/${editingId}`, formData)
-
-      setMessage("Staff updated successfully!")
+      setMessage("Updated successfully!")
       setEditingId(null)
       setFormData(initialState)
       getStaff()
-    } catch (error) {
-      console.error(error)
-      setMessage("Update failed. Check your permissions or fields.")
+    } catch {
+      setMessage("Update failed")
     }
   }
+
   const cancelEdit = () => {
     setEditingId(null)
     setFormData(initialState)
@@ -95,83 +94,41 @@ const StaffManager = () => {
   }
 
   return (
-    <div className="flight-manager">
-      <h2>Staff Management</h2>
-      <h3>{editingId ? "Update Staff Mode" : "Register New staff"}</h3>
+    <div className="dashboard-container">
+      <h2 className="dashboard-title">Staff Management</h2>
 
-      {message && <p>{message}</p>}
+      {message && <p className="message">{message}</p>}
 
-      <form onSubmit={editingId ? handleUpdate : handleCreate}>
-        <input
-          name="name"
-          placeholder="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="email"
-          placeholder="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="password"
-          placeholder="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+      <div className="card">
+        <form onSubmit={editingId ? handleUpdate : handleCreate}>
+          <div className="form-group"><input name="name" placeholder="Name" value={formData.name} onChange={handleChange} required /></div>
+          <div className="form-group"><input name="email" placeholder="Email" value={formData.email} onChange={handleChange} required /></div>
+          <div className="form-group"><input name="password" placeholder="Password" value={formData.password} onChange={handleChange} required /></div>
+          <div className="form-group"><input name="role" placeholder="Role" value={formData.role} onChange={handleChange} required /></div>
+          <div className="form-group"><input name="jobTitle" placeholder="Job Title" value={formData.jobTitle} onChange={handleChange} required /></div>
 
-        <input
-          name="role"
-          placeholder="role"
-          value={formData.role}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="jobTitle"
-          placeholder="Job Title"
-          value={formData.jobTitle}
-          onChange={handleChange}
-          required
-        />
+          {!editingId ? (
+            <button className="btn-primary">Create</button>
+          ) : (
+            <>
+              <button className="btn-primary">Update</button>
+              <button type="button" className="btn-secondary" onClick={cancelEdit}>Cancel</button>
+            </>
+          )}
+        </form>
+      </div>
 
-        {!editingId ? (
-          <button type="submit">Create Staff</button>
-        ) : (
-          <div>
-            <button type="submit">Confirm Update</button>
-            <button type="button" onClick={cancelEdit}>
-              Cancel Edit
-            </button>
+      <div className="list">
+        {staffs.map((s) => (
+          <div className="list-item" key={s._id}>
+            <p>{s.name}</p>
+            <p>{s.email}</p>
+            <p>{s.role}</p>
+
+            <button className="btn-primary" onClick={() => handleEditInit(s)}>Edit</button>
+            <button className="btn-danger" onClick={() => handleDelete(s._id)}>Delete</button>
           </div>
-        )}
-      </form>
-
-      <hr />
-
-      <h3>Staff List</h3>
-      <div>
-        {staffs.length > 0 ? (
-          staffs.map((staff) => (
-            <div key={staff._id}>
-              <p>Name: {staff.name}</p>
-              <p>Email: {staff.email}</p>
-              <p>Role: {staff.role}</p>
-              <p>Job title: {staff.jobTitle}</p>
-
-              <button onClick={() => handleEditInit(staff)}>Edit</button>
-              <button onClick={() => handleDelete(staff._id)}>Delete</button>
-
-              <hr />
-            </div>
-          ))
-        ) : (
-          <p>No staff members found.</p>
-        )}
+        ))}
       </div>
     </div>
   )

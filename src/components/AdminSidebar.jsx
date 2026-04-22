@@ -16,7 +16,7 @@ const AdminSidebar = () => {
   }
 
   return (
-    <div>
+    <div className="sidebar-container">
       <h3>Admin Panel</h3>
       <Link className="sidebar-link" to="/AdminDashboard">
         <LuLayoutDashboard /> Dashboard
