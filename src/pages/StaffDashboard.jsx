@@ -69,36 +69,6 @@ const StaffDashboard = () => {
           <h3>My Flights: {flights.length}</h3>
         </div>
       </div>
-
-      <h2 className="section-title">Today's Tasks</h2>
-
-      <div className="list">
-        {todayTasks.length === 0 ? (
-          <p>No tasks today</p>
-        ) : (
-          todayTasks.map((task) => (
-            <div className="list-item" key={task._id}>
-              <h4>{task.title}</h4>
-              <p>{task.status}</p>
-            </div>
-          ))
-        )}
-      </div>
-
-      <h2 className="section-title">Today's Flights</h2>
-
-      <div className="list">
-        {todayFlights.length === 0 ? (
-          <p>No flights today</p>
-        ) : (
-          todayFlights.map((flight) => (
-            <div className="list-item" key={flight._id}>
-              <h4>{flight.flightNumber}</h4>
-              <p>{flight.destination}</p>
-            </div>
-          ))
-        )}
-      </div>
     </div>
   )
 }
