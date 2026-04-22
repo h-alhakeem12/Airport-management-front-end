@@ -1,7 +1,6 @@
 import "./App.css"
 import "./Sidebar.css"
 import { Routes, Route, useLocation, Navigate } from "react-router-dom"
-import { Routes, Route } from "react-router-dom"
 import StaffManage from "./pages/StaffManage"
 
 import Navbar from "./components/Navbar"
@@ -20,7 +19,8 @@ import StaffSidebar from "./components/StaffSidebar"
 function App() {
   const location = useLocation()
 
-  const isLoginPage = location.pathname === "/login" || location.pathname === "/"
+  const isLoginPage =
+    location.pathname === "/login" || location.pathname === "/"
   const isAdminPath =
     location.pathname.startsWith("/admin") ||
     location.pathname === "/AdminDashboard"
