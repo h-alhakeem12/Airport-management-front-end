@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { BASE_URL } from "../global.js"
+import "../Dashboard.css"
 
 const initialState = {
   title: "",
@@ -28,6 +29,7 @@ const TaskManage = () => {
       setTasks(response.data)
       setStaff(staffResponse.data)
       setFlights(flightsResponse.data)
+
     } catch (error) {
       console.error("error getting tasks", error)
       setMessage("Error getting tasks")
@@ -85,7 +87,6 @@ const TaskManage = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault()
-
     try {
       await axios.put(`${BASE_URL}tasks/${editingId}`, formData)
       setMessage("Task updated completely!")
@@ -105,95 +106,120 @@ const TaskManage = () => {
   }
 
   return (
-    <div className="task-manager">
-      <h2>Task Management</h2>
-      <h3>{editingId ? "Update Task Mode" : "Register New Task"}</h3>
+    <div className="dashboard-container">
+      <h2 className="dashboard-title">Task Management</h2>
 
-      {message && <p>{message}</p>}
+      {message && <p className="message">{message}</p>}
 
-      <form onSubmit={editingId ? handleUpdate : handleCreate}>
-        <input
-          name="title"
-          placeholder="Task Title"
-          value={formData.title}
-          onChange={handleChange}
-          required
-        />
+      {/* FORM */}
+      <div className="card">
+        <form onSubmit={editingId ? handleUpdate : handleCreate}>
 
-        <input
-          name="description"
-          placeholder="Description"
-          value={formData.description}
-          onChange={handleChange}
-          required
-        />
-
-        <select name="status" value={formData.status} onChange={handleChange}>
-          <option value="Pending">Pending</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-
-        <select
-          name="assignedTo"
-          value={formData.assignedTo}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Staff</option>
-          {staff
-            .filter((member) => member.role === "staff")
-            .map((member) => (
-              <option key={member._id} value={member._id}>
-                {member.name}
-              </option>
-            ))}
-        </select>
-        <select
-          name="flight"
-          value={formData.flight}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Flight</option>
-          {flights.map((flight) => (
-            <option key={flight._id} value={flight._id}>
-              {flight.flightNumber}
-            </option>
-          ))}
-        </select>
-
-        {!editingId ? (
-          <button type="submit">Create Task</button>
-        ) : (
-          <div>
-            <button type="submit">Confirm Update</button>
-            <button type="button" onClick={cancelEdit}>
-              Cancel Edit
-            </button>
+          <div className="form-group">
+            <input
+              name="title"
+              placeholder="Task Title"
+              value={formData.title}
+              onChange={handleChange}
+              required
+            />
           </div>
-        )}
-      </form>
 
-      <hr />
+          <div className="form-group">
+            <input
+              name="description"
+              placeholder="Description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-      <h3>Task List</h3>
-      <div className="task-list">
+          <div className="form-group">
+            <select name="status" value={formData.status} onChange={handleChange}>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <select
+              name="assignedTo"
+              value={formData.assignedTo}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Staff</option>
+              {staff
+                .filter((member) => member.role === "staff")
+                .map((member) => (
+                  <option key={member._id} value={member._id}>
+                    {member.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <select
+              name="flight"
+              value={formData.flight}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Flight</option>
+              {flights.map((flight) => (
+                <option key={flight._id} value={flight._id}>
+                  {flight.flightNumber}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {!editingId ? (
+            <button className="btn-primary" type="submit">
+              Create Task
+            </button>
+          ) : (
+            <div>
+              <button className="btn-primary" type="submit">
+                Confirm Update
+              </button>
+
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={cancelEdit}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </form>
+      </div>
+
+      {/* LIST */}
+      <div className="list">
         {tasks.map((task) => (
-          <div key={task._id}>
-            <p>
-              {task.title} ({task.status})
-            </p>
-            <p>Description: {task.description}</p>
-            <p>Task ID: {task._id}</p>
-            <p>Assigned To: {task.assignedTo?.name || task.assignedTo}</p>
+          <div className="list-item" key={task._id}>
+            <p><strong>{task.title}</strong> ({task.status})</p>
+            <p>{task.description}</p>
+            <p>ID: {task._id}</p>
+            <p>Assigned: {task.assignedTo?.name || task.assignedTo}</p>
             <p>Flight: {task.flight?.flightNumber || task.flight}</p>
 
-            <button onClick={() => handleEditInit(task)}>Edit</button>
-            <button onClick={() => handleDelete(task._id)}>Delete</button>
+            <button className="btn-primary" onClick={() => handleEditInit(task)}>
+              Edit
+            </button>
+
+            <button className="btn-danger" onClick={() => handleDelete(task._id)}>
+              Delete
+            </button>
           </div>
         ))}
       </div>
+
     </div>
   )
 }

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { BASE_URL } from "../global.js"
+import "../Dashboard.css"
+
 
 const initialState = {
   terminalName: "",
@@ -93,83 +95,51 @@ const Terminal = () => {
     setMessage("")
   }
 
-  return (
-    <div className="terminal-manager">
-      <h2>terminalsetTerminal Management</h2>
-      <h3>{editingId ? "Update Terminal Mode" : "Register New Terminal"}</h3>
 
-      {message && <p>{message}</p>}
+return (
+  <div className="dashboard-container">
+    <h2 className="dashboard-title">Terminal Management</h2>
 
+    {message && <p className="message">{message}</p>}
+
+    <div className="card">
       <form onSubmit={editingId ? handleUpdate : handleCreate}>
-        <input
-          name="terminalName"
-          placeholder="terminal Name"
-          value={formData.terminalName}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="gateNumber"
-          placeholder="gate number"
-          value={formData.gateNumber}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="location"
-          placeholder="location"
-          value={formData.location}
-          onChange={handleChange}
-          required
-        />
-        <select
-          name="isOperational"
-          placeholder="true or false"
-          value={formData.isOperational}
-          onChange={handleChange}
-          required
-        >
-          <option value="">select</option>
-          <option value="true">true</option>
-          <option value="false">false </option>
-        </select>
+        <div className="form-group"><input name="terminalName" placeholder="Name" value={formData.terminalName} onChange={handleChange} /></div>
+        <div className="form-group"><input name="gateNumber" placeholder="Gate" value={formData.gateNumber} onChange={handleChange} /></div>
+        <div className="form-group"><input name="location" placeholder="Location" value={formData.location} onChange={handleChange} /></div>
+
+        <div className="form-group">
+          <select name="isOperational" value={formData.isOperational} onChange={handleChange}>
+            <option value="">Select</option>
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </select>
+        </div>
 
         {!editingId ? (
-          <button type="submit">Create terminal</button>
+          <button className="btn-primary">Create</button>
         ) : (
-          <div>
-            <button type="submit">Confirm Update</button>
-            <button type="button" onClick={cancelEdit}>
-              Cancel Edit
-            </button>
-          </div>
+          <>
+            <button className="btn-primary">Update</button>
+            <button className="btn-secondary" onClick={cancelEdit}>Cancel</button>
+          </>
         )}
       </form>
-
-      <hr />
-
-      <h3>Terminal List</h3>
-      <div>
-        {terminal.length > 0 ? (
-          terminal.map((t) => (
-            <div key={t._id}>
-              <p>Name: {t.terminalName}</p>
-              <p>gate Number: {t.gateNumber}</p>
-              <p>location: {t.location}</p>
-              <p>Operational: {t.isOperational}</p>
-
-              <button onClick={() => handleEditInit(t)}>Edit</button>
-              <button onClick={() => handleDelete(t._id)}>Delete</button>
-
-              <hr />
-            </div>
-          ))
-        ) : (
-          <p>No terminals found.</p>
-        )}
-      </div>
     </div>
-  )
+
+    <div className="list">
+      {terminal.map((t) => (
+        <div className="list-item" key={t._id}>
+          <p>{t.terminalName}</p>
+          <p>Gate: {t.gateNumber}</p>
+
+          <button className="btn-primary" onClick={() => handleEditInit(t)}>Edit</button>
+          <button className="btn-danger" onClick={() => handleDelete(t._id)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  </div>
+)
 }
 
 export default Terminal

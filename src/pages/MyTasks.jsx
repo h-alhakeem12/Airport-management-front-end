@@ -1,48 +1,71 @@
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios"
-import { BASE_URL } from "../global"
+import { BASE_URL } from "../global.js"
+import "../Dashboard.css"
 
-const MyTasks = () => {
+const MyTask = () => {
   const [tasks, setTasks] = useState([])
+  const [message, setMessage] = useState("")
 
-  useEffect(() => {
-    fetchTasks()
-  }, [])
-
-  const fetchTasks = async () => {
+  const getTasks = async () => {
     try {
       const token = localStorage.getItem("userToken")
       const userId = localStorage.getItem("userId")
 
-      const res = await axios.get(`${BASE_URL}tasks`, {
+      const response = await axios.get(`${BASE_URL}tasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      console.log(res.data)
-      const filteredTasks = res.data.filter(
+
+      const filteredTasks = response.data.filter(
         (task) => task?.assignedTo?._id === userId
       )
 
       setTasks(filteredTasks)
+
     } catch (error) {
-      console.error(error)
+      console.error("error getting tasks", error)
+      setMessage("Error getting tasks")
     }
   }
 
-  return (
-    <div>
-      <h1>My Tasks</h1>
+  useEffect(() => {
+    getTasks()
+  }, [])
 
-      {tasks.map((task) => (
-        <div key={task._id}>
-          <h3>Title: {task.title}</h3>
-          <p>Description: {task.description}</p>
-          <p>Status: {task.status}</p>
-        </div>
-      ))}
+  return (
+    <div className="dashboard-container">
+      <h2 className="dashboard-title">My Tasks</h2>
+
+      {message && <p className="message">{message}</p>}
+
+      <div className="list">
+        {tasks.length === 0 ? (
+          <p>No tasks assigned</p>
+        ) : (
+          tasks.map((t) => (
+            <div className="list-item" key={t._id}>
+
+              <p>
+                <strong>Title:</strong> {t.title}
+              </p>
+
+              <p>
+                <strong>Description:</strong> {t.description}
+              </p>
+
+              <p>
+                <strong>Status:</strong> {t.status}
+              </p>
+
+            </div>
+          ))
+        )}
+      </div>
     </div>
   )
 }
 
-export default MyTasks
+export default MyTask
+
