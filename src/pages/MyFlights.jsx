@@ -13,19 +13,16 @@ const MyFlights = () => {
   const fetchFlights = async () => {
     try {
       const token = localStorage.getItem("userToken")
-      const user = JSON.parse(localStorage.getItem("user"))
+      const user = localStorage.getItem("userId")
 
       const response = await axios.get(`${BASE_URL}flights`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-
-      console.log("USER:", user)
-      console.log("FLIGHTS:", response.data)
-
+      console.log(response.data)
       const filteredFlights = response.data.filter((flight) => {
-        return flight.pilot?._id === user?._id || flight.pilot === user?._id
+        return flight.pilot._id == user
       })
 
       setFlights(filteredFlights)
@@ -34,7 +31,6 @@ const MyFlights = () => {
       setMessage("Error getting flights")
     }
   }
-
   return (
     <div>
       <h1>My Flights</h1>
@@ -47,9 +43,7 @@ const MyFlights = () => {
           <div key={flight._id}>
             <h3>{flight.flightNumber}</h3>
             <p>Destination: {flight.destination}</p>
-            <p>
-              Departure Time: {new Date(flight.departureTime).toLocaleString()}
-            </p>
+            <p>Departure Time: {flight.departureTime}</p>
             <p>Status: {flight.status}</p>
             <p>
               Terminal:{" "}
